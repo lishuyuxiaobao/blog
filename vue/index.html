@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- 引入后台数据需要的js脚本 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <title>前后台管理系统</title>
+</head>
+
+<body>
+    <div id="root">
+        <!-- <ul>
+            <li v-for="user in users">
+                <p>Name : {{user.name}}</p>
+                <p>Email : {{user.email}}</p>
+            </li>
+        </ul> -->
+        <!-- 数据展示 -->
+        <div class="container">
+            <h1 class="fleft">用户管理系统</h1>
+            <button class="fright addNew" @click="showInAddModel = true">添加新用户</button>
+            <div class="clear"></div>
+            <hr>
+
+            <!-- 成功或错误的信息提示 -->
+            <p class="errorMessage animated infinite swing" v-if="errorMessage">
+                {{errorMessage}}
+            </p>
+            <p class="successMessage animated infinite bounceIn" v-if="successMessage">
+                {{successMessage}}
+            </p>
+
+            <!-- 表格 -->
+            <table class="list">
+                <!-- 表头 -->
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>邮箱</th>
+                    <th>电话</th>
+                    <th>编辑</th>
+                    <th>删除</th>
+                </tr>
+                <!-- 表体 -->
+                <tr v-for="user in users" class="animated bounceInDown">
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.mobile}}</td>
+                    <td>
+                        <button @click="showInEditModel = true;getUser(user)">编辑</button>
+                    </td>
+                    <td>
+                        <button @click="showInDeleteModel = true;getUser(user)">删除</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 添加用户弹窗 -->
+        <div class="model" id="addModel" v-if="showInAddModel">
+            <div class="modelContainer">
+                <div class="modelHeader">
+                    <p class="fleft">添加新用户</p>
+                    <button class="fright close" @click="showInAddModel = false">&times;</button>
+                    <div class="clear"></div>
+                </div>
+                <div class="modelContent">
+                    <table class="form">
+                        <tr>
+                            <th>用户名</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="newUser.username">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>邮箱</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="newUser.email">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>电话</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="newUser.mobile">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th> </th>
+                            <td>
+                                <button @click="showInAddModel = false;saveUser()">保存</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑用户弹窗 -->
+        <div class="model" id="editModel" v-if="showInEditModel">
+            <div class="modelContainer">
+                <div class="modelHeader">
+                    <p class="fleft">编辑用户</p>
+                    <button class="fright close" @click="showInEditModel = false">&times;</button>
+                    <div class="clear"></div>
+                </div>
+                <div class="modelContent">
+                    <table class="form">
+                        <tr>
+                            <th>用户名</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="user.username">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>邮箱</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="user.email">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>电话</th>
+                            <th>:</th>
+                            <td>
+                                <input type="text" v-model="user.mobile">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th> </th>
+                            <td>
+                                <button @click="showInEditModel = false;editUser(user)">更新</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 删除用户弹窗 -->
+        <div class="model" id="deleteModel" v-if="showInDeleteModel">
+            <div class="modelContainer">
+                <div class="modelHeader">
+                    <p class="fleft">确定要删除么？</p>
+                    <button class="fright close" @click="showInDeleteModel = false">&times;</button>
+                    <div class="clear"></div>
+                </div>
+                <div class="modelContent">
+                    你将要删除的用户是 {{user.username}}
+                    <br><br><br>
+
+                    <button @click="showInDeleteModel = false;deleteUser(user)">确定</button>
+                    <button @click="showInDeleteModel = false">取消</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="app.js"></script>
+
+</html>
